@@ -42,6 +42,7 @@ public class ParallelCalculationThread extends Thread {
             MetalAlloy metalAlloyRecieved = (MetalAlloy) in.readObject();
             MetalAlloy metalAlloyResult = new MetalAlloy(metalAlloyRecieved.getHeight(), metalAlloyRecieved.getWidth(), metalAlloyRecieved.getC1(), metalAlloyRecieved.getC2(), metalAlloyRecieved.getC3());
             metalAlloyRecieved.calculateQuadrant(metalAlloyResult, quadrantToCalc);
+
             out.writeObject(metalAlloyResult);
             out.flush();
             socket.close();

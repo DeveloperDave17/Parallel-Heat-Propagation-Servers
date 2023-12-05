@@ -32,9 +32,63 @@ public class MetalAlloyRegion implements Serializable {
         Random random = ThreadLocalRandom.current();
         double baseMetalPercent = 1.0 / 3.0;
         // varying metal composition
-        percentOfMetal3 = baseMetalPercent;
-        percentOfMetal1 = baseMetalPercent;
-        percentOfMetal2 = baseMetalPercent;
+        double variance = baseMetalPercent * 0.25;
+        percentOfMetal3 = baseMetalPercent + random.nextDouble(-variance, variance);
+        percentOfMetal1 = baseMetalPercent + random.nextDouble(-variance, variance);;
+        percentOfMetal2 = baseMetalPercent + random.nextDouble(-variance, variance);;
+
+        // shift the random values to add up to 100%
+        double totalPercentAmount = percentOfMetal1 + percentOfMetal2 + percentOfMetal3;
+        double differenceBetweenRequiredPercentAndCurrentTotal = totalPercentAmount - 1.0;
+
+        // Adjust difference to move in a favorable direction, if our difference is negative we know that we must increase the overall percentage and so on.
+        double partialDifferenceForAdjustment = -differenceBetweenRequiredPercentAndCurrentTotal / 3.0;
+        // find the amount of metals that vary below the average
+        int amountBelowAverage = 0;
+        if (percentOfMetal3 < baseMetalPercent) amountBelowAverage++;
+        if (percentOfMetal2 < baseMetalPercent) amountBelowAverage++;
+        if (percentOfMetal1 < baseMetalPercent) amountBelowAverage++;
+
+        if (differenceBetweenRequiredPercentAndCurrentTotal < 0) { // We need to increase the overall percentage
+            // adjustment for percents above the baseline
+            double aboveBaseLineAdjustment = partialDifferenceForAdjustment / 2.0;
+            int amountAboveAverage = 3 - amountBelowAverage;
+            double belowBaseLineAdjustment = partialDifferenceForAdjustment + (amountAboveAverage * amountAboveAverage * (0.75 * partialDifferenceForAdjustment));
+            if (percentOfMetal3 < baseMetalPercent) {
+                percentOfMetal3 += belowBaseLineAdjustment;
+            } else {
+                percentOfMetal3 -= aboveBaseLineAdjustment;
+            }
+            if (percentOfMetal2 < baseMetalPercent) {
+                percentOfMetal2 += belowBaseLineAdjustment;
+            } else {
+                percentOfMetal2 -= aboveBaseLineAdjustment;
+            }
+            if (percentOfMetal1 < baseMetalPercent) {
+                percentOfMetal1 += belowBaseLineAdjustment;
+            } else {
+                percentOfMetal1 -= aboveBaseLineAdjustment;
+            }
+        } else if (differenceBetweenRequiredPercentAndCurrentTotal > 0) { // we need to decrease the overall percentage
+            // adjustment for percents above the baseline
+            double aboveBaseLineAdjustment = partialDifferenceForAdjustment + (amountBelowAverage * amountBelowAverage * ( 0.75 * partialDifferenceForAdjustment));
+            double belowBaseLineAdjustment = partialDifferenceForAdjustment / 2.0;
+            if (percentOfMetal3 < baseMetalPercent) {
+                percentOfMetal3 -= belowBaseLineAdjustment;
+            } else {
+                percentOfMetal3 += aboveBaseLineAdjustment;
+            }
+            if (percentOfMetal2 < baseMetalPercent) {
+                percentOfMetal2 -= belowBaseLineAdjustment;
+            } else {
+                percentOfMetal2 += aboveBaseLineAdjustment;
+            }
+            if (percentOfMetal1 < baseMetalPercent) {
+                percentOfMetal1 -= belowBaseLineAdjustment;
+            } else {
+                percentOfMetal1 += aboveBaseLineAdjustment;
+            }
+        }
     }
 
     public void setTemperature(double temperature) {
@@ -114,5 +168,14 @@ public class MetalAlloyRegion implements Serializable {
         r = regionToCopy.getR();
         g = regionToCopy.getG();
         b = regionToCopy.getB();
+    }
+
+    public void deepCopyRegion(MetalAlloyRegion regionToCopy) {
+        r = regionToCopy.getR();
+        g = regionToCopy.getG();
+        b = regionToCopy.getB();
+        percentOfMetal1 = regionToCopy.getPercentOfMetal1();
+        percentOfMetal2 = regionToCopy.getPercentOfMetal2();
+        percentOfMetal3 = regionToCopy.getPercentOfMetal3();
     }
 }

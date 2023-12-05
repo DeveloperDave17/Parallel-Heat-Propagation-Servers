@@ -3,7 +3,7 @@ package edu.oswego.cs;
 import java.io.Serializable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Phaser;
 
 public class MetalAlloy implements Serializable {
 
@@ -16,7 +16,7 @@ public class MetalAlloy implements Serializable {
     private double c3;
 
     // Constraints for Tasks
-    private final int NUM_CALCULATIONS_PER_THREAD = 4;
+    private final int NUM_CALCULATIONS_PER_THREAD = 60;
 
     private MetalAlloyRegion[][] metalAlloyRegions;
 
@@ -140,6 +140,7 @@ public class MetalAlloy implements Serializable {
 
     public void calculateQuadrant(MetalAlloy alloyToStoreResults, Quadrant quadrantToRun) {
         ExecutorService workStealingPool = new ForkJoinPool();
+        Phaser phaser = new Phaser(1);
         // used to specify the dimensions of the quadrant.
         int quadrantHeight;
         int quadrantWidth;
@@ -152,17 +153,19 @@ public class MetalAlloy implements Serializable {
                         final int COLEND;
                         // Possible exclusive end of the range of columns a task is in charge of (8 cells)
                         int possibleColCalcEnd = j + NUM_CALCULATIONS_PER_THREAD;
-                        if (width <= possibleColCalcEnd) {
+                        if (possibleColCalcEnd < width) {
                             COLEND = possibleColCalcEnd;
                         } else {
                             COLEND = width;
                         }
+                        phaser.register();
                         workStealingPool.submit(() -> {
                             for (int currentCol = COL; currentCol < COLEND; currentCol++) {
                                 double result = calculateNewTempForRegion(ROW, currentCol);
                                 alloyToStoreResults.setTempOfRegion(result, ROW, currentCol);
                                 alloyToStoreResults.getMetalAlloyRegion(ROW, currentCol).calcRGB();
                             }
+                            phaser.arriveAndDeregister();
                         });
                     }
                 }
@@ -178,17 +181,19 @@ public class MetalAlloy implements Serializable {
                         final int COLEND;
                         // Possible exclusive end of the range of columns a task is in charge of (8 cells)
                         int possibleColCalcEnd = j + NUM_CALCULATIONS_PER_THREAD;
-                        if (width <= possibleColCalcEnd) {
+                        if (possibleColCalcEnd < width) {
                             COLEND = possibleColCalcEnd;
                         } else {
                             COLEND = width;
                         }
+                        phaser.register();
                         workStealingPool.submit(() -> {
                             for (int currentCol = COL; currentCol < COLEND; currentCol++) {
                                 double result = calculateNewTempForRegion(ROW, currentCol);
                                 alloyToStoreResults.setTempOfRegion(result, ROW, currentCol);
                                 alloyToStoreResults.getMetalAlloyRegion(ROW, currentCol).calcRGB();
                             }
+                            phaser.arriveAndDeregister();
                         });
                     }
                 }
@@ -204,17 +209,19 @@ public class MetalAlloy implements Serializable {
                         final int COLEND;
                         // Possible exclusive end of the range of columns a task is in charge of (8 cells)
                         int possibleColCalcEnd = j + NUM_CALCULATIONS_PER_THREAD;
-                        if (width <= possibleColCalcEnd) {
+                        if (possibleColCalcEnd < width) {
                             COLEND = possibleColCalcEnd;
                         } else {
                             COLEND = width;
                         }
+                        phaser.register();
                         workStealingPool.submit(() -> {
                             for (int currentCol = COL; currentCol < COLEND; currentCol++) {
                                 double result = calculateNewTempForRegion(ROW, currentCol);
                                 alloyToStoreResults.setTempOfRegion(result, ROW, currentCol);
                                 alloyToStoreResults.getMetalAlloyRegion(ROW, currentCol).calcRGB();
                             }
+                            phaser.arriveAndDeregister();
                         });
                     }
                 }
@@ -230,17 +237,19 @@ public class MetalAlloy implements Serializable {
                         final int COLEND;
                         // Possible exclusive end of the range of columns a task is in charge of (8 cells)
                         int possibleColCalcEnd = j + NUM_CALCULATIONS_PER_THREAD;
-                        if (width <= possibleColCalcEnd) {
+                        if (possibleColCalcEnd < width) {
                             COLEND = possibleColCalcEnd;
                         } else {
                             COLEND = width;
                         }
+                        phaser.register();
                         workStealingPool.submit(() -> {
                             for (int currentCol = COL; currentCol < COLEND; currentCol++) {
                                 double result = calculateNewTempForRegion(ROW, currentCol);
                                 alloyToStoreResults.setTempOfRegion(result, ROW, currentCol);
                                 alloyToStoreResults.getMetalAlloyRegion(ROW, currentCol).calcRGB();
                             }
+                            phaser.arriveAndDeregister();
                         });
                     }
                 }
@@ -256,17 +265,19 @@ public class MetalAlloy implements Serializable {
                         final int COLEND;
                         // Possible exclusive end of the range of columns a task is in charge of (8 cells)
                         int possibleColCalcEnd = j + NUM_CALCULATIONS_PER_THREAD;
-                        if (width <= possibleColCalcEnd) {
+                        if (possibleColCalcEnd < width) {
                             COLEND = possibleColCalcEnd;
                         } else {
                             COLEND = width;
                         }
+                        phaser.register();
                         workStealingPool.submit(() -> {
                             for (int currentCol = COL; currentCol < COLEND; currentCol++) {
                                 double result = calculateNewTempForRegion(ROW, currentCol);
                                 alloyToStoreResults.setTempOfRegion(result, ROW, currentCol);
                                 alloyToStoreResults.getMetalAlloyRegion(ROW, currentCol).calcRGB();
                             }
+                            phaser.arriveAndDeregister();
                         });
                     }
                 }
@@ -282,17 +293,19 @@ public class MetalAlloy implements Serializable {
                         final int COLEND;
                         // Possible exclusive end of the range of columns a task is in charge of (8 cells)
                         int possibleColCalcEnd = j + NUM_CALCULATIONS_PER_THREAD;
-                        if (width <= possibleColCalcEnd) {
+                        if (possibleColCalcEnd < width) {
                             COLEND = possibleColCalcEnd;
                         } else {
                             COLEND = width;
                         }
+                        phaser.register();
                         workStealingPool.submit(() -> {
                             for (int currentCol = COL; currentCol < COLEND; currentCol++) {
                                 double result = calculateNewTempForRegion(ROW, currentCol);
                                 alloyToStoreResults.setTempOfRegion(result, ROW, currentCol);
                                 alloyToStoreResults.getMetalAlloyRegion(ROW, currentCol).calcRGB();
                             }
+                            phaser.arriveAndDeregister();
                         });
                     }
                 }
@@ -308,17 +321,19 @@ public class MetalAlloy implements Serializable {
                         final int COLEND;
                         // Possible exclusive end of the range of columns a task is in charge of (8 cells)
                         int possibleColCalcEnd = j + NUM_CALCULATIONS_PER_THREAD;
-                        if (width <= possibleColCalcEnd) {
+                        if (possibleColCalcEnd < width) {
                             COLEND = possibleColCalcEnd;
                         } else {
                             COLEND = width;
                         }
+                        phaser.register();
                         workStealingPool.submit(() -> {
                             for (int currentCol = COL; currentCol < COLEND; currentCol++) {
                                 double result = calculateNewTempForRegion(ROW, currentCol);
                                 alloyToStoreResults.setTempOfRegion(result, ROW, currentCol);
                                 alloyToStoreResults.getMetalAlloyRegion(ROW, currentCol).calcRGB();
                             }
+                            phaser.arriveAndDeregister();
                         });
                     }
                 }
@@ -334,17 +349,19 @@ public class MetalAlloy implements Serializable {
                         final int COLEND;
                         // Possible exclusive end of the range of columns a task is in charge of (8 cells)
                         int possibleColCalcEnd = j + NUM_CALCULATIONS_PER_THREAD;
-                        if (width <= possibleColCalcEnd) {
+                        if (possibleColCalcEnd < width) {
                             COLEND = possibleColCalcEnd;
                         } else {
                             COLEND = width;
                         }
+                        phaser.register();
                         workStealingPool.submit(() -> {
                             for (int currentCol = COL; currentCol < COLEND; currentCol++) {
                                 double result = calculateNewTempForRegion(ROW, currentCol);
                                 alloyToStoreResults.setTempOfRegion(result, ROW, currentCol);
                                 alloyToStoreResults.getMetalAlloyRegion(ROW, currentCol).calcRGB();
                             }
+                            phaser.arriveAndDeregister();
                         });
                     }
                 }
@@ -360,17 +377,19 @@ public class MetalAlloy implements Serializable {
                         final int COLEND;
                         // Possible exclusive end of the range of columns a task is in charge of (8 cells)
                         int possibleColCalcEnd = j + NUM_CALCULATIONS_PER_THREAD;
-                        if (width <= possibleColCalcEnd) {
+                        if (possibleColCalcEnd < width) {
                             COLEND = possibleColCalcEnd;
                         } else {
                             COLEND = width;
                         }
+                        phaser.register();
                         workStealingPool.submit(() -> {
                             for (int currentCol = COL; currentCol < COLEND; currentCol++) {
                                 double result = calculateNewTempForRegion(ROW, currentCol);
                                 alloyToStoreResults.setTempOfRegion(result, ROW, currentCol);
                                 alloyToStoreResults.getMetalAlloyRegion(ROW, currentCol).calcRGB();
                             }
+                            phaser.arriveAndDeregister();
                         });
                     }
                 }
@@ -386,28 +405,25 @@ public class MetalAlloy implements Serializable {
                         final int COLEND;
                         // Possible exclusive end of the range of columns a task is in charge of (8 cells)
                         int possibleColCalcEnd = j + NUM_CALCULATIONS_PER_THREAD;
-                        if (width <= possibleColCalcEnd) {
+                        if (possibleColCalcEnd < width) {
                             COLEND = possibleColCalcEnd;
                         } else {
                             COLEND = width;
                         }
+                        phaser.register();
                         workStealingPool.submit(() -> {
                             for (int currentCol = COL; currentCol < COLEND; currentCol++) {
                                 double result = calculateNewTempForRegion(ROW, currentCol);
                                 alloyToStoreResults.setTempOfRegion(result, ROW, currentCol);
                                 alloyToStoreResults.getMetalAlloyRegion(ROW, currentCol).calcRGB();
                             }
+                            phaser.arriveAndDeregister();
                         });
                     }
                 }
                 break;
         }
-        workStealingPool.shutdown();
-        try {
-            workStealingPool.awaitTermination(1, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        phaser.arriveAndAwaitAdvance();
     }
 
     public double getC1() {
@@ -554,6 +570,17 @@ public class MetalAlloy implements Serializable {
                     }
                 }
                 break;
+        }
+    }
+
+    public void deepCopyRegionsTo(MetalAlloy alloyToStore) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                double tempOfRegion = metalAlloyRegions[i][j].getTemperature();
+                alloyToStore.setTempOfRegion(tempOfRegion, i, j);
+                MetalAlloyRegion region = alloyToStore.getMetalAlloyRegion(i,j);
+                region.deepCopyRegion(metalAlloyRegions[i][j]);
+            }
         }
     }
 }

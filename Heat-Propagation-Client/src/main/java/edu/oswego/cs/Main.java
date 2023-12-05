@@ -17,7 +17,7 @@ public class Main {
     private static final int DEFAULT_WIDTH = 160;
     private static final int DEFAULT_THRESHOLD = 35000;
 
-    private static final int DEFAULT_SERVER_COUNT = 1;
+    private static final int DEFAULT_SERVER_COUNT = 2;
     private static final int PORT_NUMBER = 26940;
 
     private static final String HOST_NAME = "localhost";
@@ -114,10 +114,7 @@ public class Main {
         alloyA.setTempOfRegion(t, height - 1, width - 1);
         alloyA.getMetalAlloyRegion(0, 0).calcRGB();
         alloyA.getMetalAlloyRegion(height - 1, width - 1).calcRGB();
-        alloyB.setTempOfRegion(s, 0, 0);
-        alloyB.setTempOfRegion(t, height - 1, width - 1);
-        alloyB.getMetalAlloyRegion(0, 0).calcRGB();
-        alloyB.getMetalAlloyRegion(height - 1, width - 1).calcRGB();
+        alloyA.deepCopyRegionsTo(alloyB);
 
         // initialize server port list
         List<Integer> ports = new ArrayList<>();
